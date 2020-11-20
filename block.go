@@ -59,8 +59,8 @@ func NewBlock(data string, preBlockHash []byte) *Block {
 
 //3. 生成哈希
 func (block *Block) SetHash() {
-	var blockInfo []byte
 	// 1. 拼装数据
+	/*
 	blockInfo = append(blockInfo, Uint64ToByte(block.Version)...)
 	blockInfo = append(blockInfo, block.PrevHash...)
 	blockInfo = append(blockInfo, block.MerkelRoot...)
@@ -68,6 +68,18 @@ func (block *Block) SetHash() {
 	blockInfo = append(blockInfo, Uint64ToByte(block.TimeStamp)...)
 	blockInfo = append(blockInfo, Uint64ToByte(block.Diffculty)...)
 	blockInfo = append(blockInfo, Uint64ToByte(block.Nonce)...)
+	*/
+	tmp:= [][]byte{
+		Uint64ToByte(block.Version),
+		block.PrevHash,
+		block.MerkelRoot,
+		block.Data,
+		Uint64ToByte(block.TimeStamp),
+		Uint64ToByte(block.Diffculty),
+		Uint64ToByte(block.Nonce),
+	}
+	//将二维切片数组链接起来，返回一个一维切片数组
+	blockInfo := bytes.Join(tmp, []byte{})
 	// 2. sha256
 	hash := sha256.Sum256(blockInfo)
 	block.Hash = hash[:]
