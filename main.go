@@ -29,5 +29,5 @@ func NewBlock(data string , preBlockHash []byte) *Block {
 
 
 func main() {
-	
+	NewBlock("你太强了",[]byte{})
 }
