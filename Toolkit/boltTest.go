@@ -12,7 +12,7 @@ func main() {
 	if err != nil {
 		log.Panic("打开数据库失败")
 	}
-
+	defer db.Close()
 	//2. 找到抽屉bucket（没有就创建）
 	db.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte("b1"))
@@ -24,11 +24,22 @@ func main() {
 			}
 		}
 		//3. 写数据
-		bucket.Put([]byte("11111"),[]byte("hello"))
-		bucket.Put([]byte("22222"),[]byte("world"))
-		fmt.Println("创建成功")
+		bucket.Put([]byte("11111"), []byte("hello"))
+		bucket.Put([]byte("22222"), []byte("world"))
+
 		return nil
 	})
 
 	//4. 读数据
+	db.View(func(tx *bolt.Tx) error {
+		//1. 找到抽屉，没有的话直接退出
+		bucket := tx.Bucket([]byte("b1"))
+		if err != nil {
+			log.Panic("bucket b1 不应该为空，请检查！")
+		}
+		v1 := bucket.Get([]byte("11111"))
+		v2 := bucket.Get([]byte("22222"))
+		fmt.Printf("%s\n,%s\n", v1, v2)
+		return nil
+	})
 }
