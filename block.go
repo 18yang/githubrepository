@@ -52,7 +52,13 @@ func NewBlock(data string, preBlockHash []byte) *Block {
 		Data:       []byte(data),
 	}
 	//设置哈希值
-	block.SetHash()
+	//block.SetHash()
+	//创建一个pow对象 不停的进行hash运算 查找随机数
+	pow := NewProofOfWork(&block)
+	hash, nonce := pow.Run()
+	//根据挖矿结果对区块数据进行更新
+	block.Hash = hash
+	block.Nonce = nonce
 
 	return &block
 }
