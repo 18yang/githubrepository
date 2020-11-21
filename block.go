@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"encoding/binary"
+	"encoding/gob"
 	"log"
 	"time"
 )
@@ -83,4 +84,30 @@ func (block *Block) SetHash() {
 	// 2. sha256
 	hash := sha256.Sum256(blockInfo)
 	block.Hash = hash[:]
+}
+//序列化
+func (block *Block)Serialize() []byte {
+	var buffer bytes.Buffer
+	//使用gob进行序列化得到字节流
+	// 1. 定义一个编码器
+	encoder := gob.NewEncoder(&buffer)
+	//2. 使用编码器编码
+	err := encoder.Encode(&block)
+	if err != nil {
+		panic(err)
+	}
+
+	//fmt.Printf("%v\n",buffer)
+	return buffer.Bytes()
+}
+//反序列化
+func Deserialize(data []byte) Block {
+	decoder := gob.NewDecoder(bytes.NewReader(data))
+	//2. 使用解码器解码
+	var block Block
+	err := decoder.Decode(&block)
+	if err != nil {
+		panic(err)
+	}
+	return block
 }
