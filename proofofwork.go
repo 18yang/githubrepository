@@ -29,6 +29,7 @@ func NewProofOfWork(block *Block) *ProofOfWork {
 }
 //提供计算不断计算hash的函数
 func (pow *ProofOfWork) Run() ([]byte, uint64) {
+	fmt.Println("开始挖矿...")
 	var nonce uint64 //随机数
 	block := pow.block  //区块
 	var hash [32]byte   //哈希值
