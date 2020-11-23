@@ -39,9 +39,8 @@ func (pow *ProofOfWork) Run() ([]byte, uint64) {
 			Uint64ToByte(block.Version),
 			block.PrevHash,
 			block.MerkelRoot,
-			block.Data,
 			Uint64ToByte(block.TimeStamp),
-			Uint64ToByte(block.Diffculty),
+			Uint64ToByte(block.Difficulty),
 			Uint64ToByte(nonce),
 		}
 		//将二维切片数组链接起来，返回一个一维切片数组
