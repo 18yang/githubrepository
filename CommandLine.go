@@ -57,19 +57,24 @@ func (cli *CLI) Send(from, to string, amount float64, miner, data string) {
 	//3. 添加到区块
 	cli.bc.AddBlock([]*Transaction{coinbase, tx})
 	fmt.Printf("转账成功！\n")
-	////1. 创建挖矿交易
-	//coinbase := NewCoinBaseTX(miner, data)
-	////2. 创建一个普通交易
-	//tx := NewTransaction(from, to, amount, cli.bc)
-	//fmt.Printf("22222222222\n")
-	//if tx == nil {
-	//	fmt.Printf("3333333333\n")
-	//	//fmt.Printf("无效的交易")
-	//	return
-	//}
-	////3. 添加到区块
-	//fmt.Printf("444444444444\n")
-	//cli.bc.AddBlock([]*Transaction{coinbase, tx})
-	//fmt.Printf("555555555555\n")
-	//fmt.Printf("转账成功！\n")
 }
+
+func (cli *CLI)NewWallet()  {
+	//wallet := NewWallet()
+	//address := wallet.NewAddress()
+	//fmt.Printf("私钥：%v\n",wallet.Private)
+	//fmt.Printf("公钥：%v\n",wallet.PubKey)
+	//fmt.Printf("地址：%s\n",address)
+	ws := NewWallets()
+	address := ws.CreateWallet()
+	fmt.Printf("地址： %s\n",address)
+}
+func (cli *CLI) ListAddresses()  {
+	ws := NewWallets()
+	addresses := ws.GetAllAddresses()
+	for _,address :=range addresses {
+		fmt.Printf("地址： %s\n",address)
+	}
+}
+
+

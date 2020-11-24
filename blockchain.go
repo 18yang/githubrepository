@@ -139,7 +139,7 @@ func (bc *BlockChain) FindUTXOs(address string) []TXOutput {
 				for _, input := range tx.TXInputs {
 					//判断一下当前这个input和目标是否一致，如果相同，表示是消耗过的output
 					if input.Sig == address {
-						//请不要用变量存储map，会出现错误
+						//请不要用变量存储map，会出现错误：
 						//indexArray := spentOutputs[string(input.TXid)]
 						spentOutputs[string(input.TXid)] = append(spentOutputs[string(input.TXid)], input.Index)
 					}
