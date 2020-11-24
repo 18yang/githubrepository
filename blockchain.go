@@ -109,12 +109,12 @@ func (bc *BlockChain) FindUTXOs(address string) []TXOutput {
 		block := it.Next()
 		//遍历交易
 		for _, tx := range block.Transactions {
-			fmt.Printf("current txid: %x\n", tx.TXID)
+			//fmt.Printf("current txid: %x\n", tx.TXID)
 
 		OUTPUT:
 			//遍历output， 找到和自己相关的utxo（再添加output之前检查一下自己是否消耗过）
 			for i, output := range tx.TXoutputs {
-				fmt.Printf("current index: %x\n", i)
+				//fmt.Printf("current index: %x\n", i)
 				//在这里做一个过滤，将所有消耗过的output和当前的所即将添加output对比一下
 				//如果相同，即跳过，否则添加
 				//如果当前的交易id存在于我们已经表示的map，那么说明这个交易是有消耗过的
@@ -139,16 +139,17 @@ func (bc *BlockChain) FindUTXOs(address string) []TXOutput {
 				for _, input := range tx.TXInputs {
 					//判断一下当前这个input和目标是否一致，如果相同，表示是消耗过的output
 					if input.Sig == address {
+						//请不要用变量存储map，会出现错误
 						//indexArray := spentOutputs[string(input.TXid)]
 						spentOutputs[string(input.TXid)] = append(spentOutputs[string(input.TXid)], input.Index)
 					}
 				}
 			} else {
-				fmt.Printf("这是coinbase, 不做遍历\n")
+				//fmt.Printf("这是coinbase, 不做遍历\n")
 			}
 		}
 		if len(block.PrevHash) == 0 {
-			fmt.Println("区块链遍历完成退出")
+			//fmt.Println("区块链遍历完成退出")
 			break
 		}
 	}
@@ -198,10 +199,13 @@ func (bc *BlockChain) FindNeedUTXOs(from string, amount float64) (map[string][]u
 						//3. 比较一下是否满足转账需求
 						//	a. 满足的话，直接返回，
 						if calculate >= amount {
+							fmt.Printf("找到满足转账金额，当前总额：%f\n",calculate)
 							return utxos, calculate
 						}
 						//	b. 不满足继续统计
 
+					}else{
+						fmt.Printf("不满足转账金额，当前总额：%f\n",calculate)
 					}
 				}
 			}
