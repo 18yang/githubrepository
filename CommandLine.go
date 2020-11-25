@@ -4,36 +4,51 @@ import "fmt"
 
 func (cli *CLI) PrintBlockChain() {
 	cli.bc.Printchain()
-	fmt.Println("打印区块链完成\n")
+	fmt.Printf("打印区块链完成\n")
 }
 
 func (cli *CLI) PrintBlockChainReverse() {
-	chain := cli.bc
-	iterator := chain.NewIterator()
+	bc := cli.bc
+	//创建迭代器
+	it := bc.NewIterator()
 
+	//调用迭代器，返回我们的每一个区块数据
 	for {
-		block := iterator.Next()
-		fmt.Println("=============================================")
-		fmt.Printf("版本号:  %d\n", block.Version)
-		fmt.Printf("前区块的哈希值:  %x\n", block.PrevHash)
-		fmt.Printf("Merkel根:  %x\n", block.MerkelRoot)
-		fmt.Printf("时间戳: %d\n", block.TimeStamp)
-		fmt.Printf("难度值:  %d\n", block.Difficulty)
-		fmt.Printf("随机数:  %d\n", block.Nonce)
-		fmt.Printf("当前区块哈希:  %x\n", block.Hash)
-		fmt.Printf("区块数据:  %s\n", block.Transactions[0].TXInputs[0].PubKey)
-		fmt.Println("=============================================")
-		fmt.Println()
+		//返回区块，左移
+		block := it.Next()
+
+		for _, tx := range block.Transactions {
+			fmt.Println(tx)
+		}
 		if len(block.PrevHash) == 0 {
-			fmt.Printf("遍历结束\n")
-			return
+			fmt.Printf("区块链遍历结束！")
+			break
 		}
 	}
 }
-func (cli *CLI) AddBlock(data string) {
-	//cli.bc.AddBlock(data)//TODO
-	fmt.Printf("添加区块成功！\n")
-}
+//func (cli *CLI) PrintBlockChainReverse() {
+//	chain := cli.bc
+//	iterator := chain.NewIterator()
+//
+//	for {
+//		block := iterator.Next()
+//		fmt.Println("=============================================")
+//		fmt.Printf("版本号:  %d\n", block.Version)
+//		fmt.Printf("前区块的哈希值:  %x\n", block.PrevHash)
+//		fmt.Printf("Merkel根:  %x\n", block.MerkelRoot)
+//		fmt.Printf("时间戳: %d\n", block.TimeStamp)
+//		fmt.Printf("难度值:  %d\n", block.Difficulty)
+//		fmt.Printf("随机数:  %d\n", block.Nonce)
+//		fmt.Printf("当前区块哈希:  %x\n", block.Hash)
+//		fmt.Printf("区块数据:  %s\n", block.Transactions[0].TXInputs[0].PubKey)
+//		fmt.Println("=============================================")
+//		fmt.Println()
+//		if len(block.PrevHash) == 0 {
+//			fmt.Printf("遍历结束\n")
+//			return
+//		}
+//	}
+//}
 
 func (cli *CLI) GetBalance(address string) {
 	//校验地址是否有效
