@@ -3,6 +3,7 @@ package main
 import (
 	"BlockChain/base58"
 	"BlockChain/ripemd160"
+	"bytes"
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
@@ -76,4 +77,18 @@ func CheckSum(data []byte) []byte {
 	//25字节数据
 	data = append(data,checkCode...)
 	return data
+}
+
+func IsValidAddress(address string) bool  {
+	//1. 解码
+	addressByte := base58.Decode(address)
+	if len(addressByte) < 4 {
+		return false
+	}
+	//2. 取数据
+	payload := addressByte[ : len(addressByte)-4]
+	checkSum1 := addressByte[len(addressByte)-4 : ]
+	checkSum2 := CheckSum(payload)
+	//3. 比较
+	return bytes.Equal(checkSum1,checkSum2)
 }
